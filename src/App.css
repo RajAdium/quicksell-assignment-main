@@ -1,0 +1,78 @@
+header {
+    padding: 1rem 2rem;
+    border-bottom: 1px solid var(--clr-grey-9);
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    background-color: rgb(78, 13, 176);
+}
+
+.main-container {
+    background-color: var(--clr-grey-13);
+    min-height: 100vh;
+}
+.display-button {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.5rem 1rem;
+    background-color: white;
+}
+
+.select-container {
+    max-width: max-content;
+}
+
+.flex-container {
+    padding: 5px;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.board-grid-container {
+    padding: 2.5rem;
+}
+
+.board-grid-inner {
+    display: grid;
+    gap: 10px;
+    height: 100%;
+    max-height: 100%;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.select-element {
+    width: 15rem;
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    padding: 0.5rem;
+    border-radius: 5px;
+    text-transform: capitalize;
+}
+
+.select-popup {
+    max-width: max-content;
+    padding: 1rem;
+    margin-top: 0.3rem;
+    position: absolute;
+    background-color: white;
+    z-index: 100000;
+}
+
+.select-popup .flex-container {
+    align-items: center;
+}
+
+.show-modal {
+    display: block;
+}
+
+.hide-modal {
+    display: none;
+}
+
+@media screen and (max-width: 1000px) {
+    .board-grid-inner {
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+}
