@@ -27,8 +27,8 @@ function groupTicketsByProperty(property, state) {
 
 function App() {
     const [tickets, setTickets] = useState();
-    const [users, setUsers] = useState();
-    const [selectedGrouping, setSelectedGrouping] = useState(() => {
+    const [user, setUser] = useState();
+    const [markedGrouping, setMarkedGrouping] = useState(() => {
         const storedState = getLocalStorageItem("selectedgrouping");
         return storedState ? storedState : groups.STATUS;
     });
@@ -36,46 +36,46 @@ function App() {
         const storedState = getLocalStorageItem("selectedordering");
         return storedState ? storedState : ordering.PRIORITY;
     });
-    const [displayState, setDisplayState] = useState(() => {
+    const [showState, setShowState] = useState(() => {
         const storedState = getLocalStorageItem("currentstate");
         return storedState ? storedState : [];
     });
     const [showFilterContainer, setShowFilterContainer] = useState(false);
     function getNameById(id) {
-        const foundUser = users.find((u) => u.id === id);
+        const foundUser = user.find((u) => u.id === id);
         return foundUser ? foundUser.name : "User not found";
     }
 
     useEffect(() => {
-        const loadKanbanData = async () => {
+        const loadData = async () => {
             try {
                 const results = await fetchKanbanData();
                 // Now you can use the 'results' data here
                 setTickets(results.tickets);
-                setUsers(results.users);
+                setUser(results.user);
             } catch (error) {
                 // Handle the error if necessary
                 console.error("Error loading kanban data:", error);
             }
         };
-        loadKanbanData();
+        loadData();
     }, []);
 
     useEffect(() => {
         if (tickets === undefined) return;
-        if (displayState.length === 0) {
+        if (showState.length === 0) {
             const ticketsGroupedByStatus = groupTicketsByProperty(
                 "status",
                 tickets
             );
-            setDisplayState(ticketsGroupedByStatus);
+            setShowState(ticketsGroupedByStatus);
             setLocalStorageItem("currentstate", ticketsGroupedByStatus);
         }
     }, [tickets]);
 
     const groupHandler = (e) => {
         setShowFilterContainer(false);
-        setSelectedGrouping(e.target.value);
+        setMarkedGrouping(e.target.value);
         setLocalStorageItem("selectedgrouping", e.target.value);
         if (e.target.value === "user") {
             const ticketsGroupedByName = groupTicketsByProperty(
@@ -88,14 +88,14 @@ function App() {
                 delete ticketsGroupedByName[key];
             });
 
-            setDisplayState(ticketsGroupedByName);
+            setShowState(ticketsGroupedByName);
             setLocalStorageItem("currentstate", ticketsGroupedByName);
         } else if (e.target.value === "status") {
             const ticketsGroupedByStatus = groupTicketsByProperty(
                 "status",
                 tickets
             );
-            setDisplayState(ticketsGroupedByStatus);
+            setShowState(ticketsGroupedByStatus);
             setLocalStorageItem("currentstate", ticketsGroupedByStatus);
         } else if (e.target.value === "priority") {
             const ticketsGroupedByPriority = groupTicketsByProperty(
@@ -109,7 +109,7 @@ function App() {
                     ticketsGroupedByPriority[key];
                 delete ticketsGroupedByPriority[key];
             });
-            setDisplayState(ticketsGroupedByPriority);
+            setShowState(ticketsGroupedByPriority);
             setLocalStorageItem("currentstate", ticketsGroupedByPriority);
         }
     };
@@ -124,13 +124,13 @@ function App() {
 
             const sortedData = {};
 
-            for (const userName in displayState) {
-                const userTasks = displayState[userName];
+            for (const userName in showState) {
+                const userTasks = showState[userName];
                 const sortedTasks = sortTasksByPriority(userTasks);
                 sortedData[userName] = sortedTasks;
             }
 
-            setDisplayState(sortedData);
+            setShowState(sortedData);
             setLocalStorageItem("currentstate", sortedData);
         } else if (e.target.value === "title") {
             const sortTasksByTitleAscending = (tasks) => {
@@ -141,12 +141,12 @@ function App() {
 
             const sortedData = {};
 
-            for (const userName in displayState) {
-                const userTasks = displayState[userName];
+            for (const userName in showState) {
+                const userTasks = showState[userName];
                 const sortedTasks = sortTasksByTitleAscending(userTasks);
                 sortedData[userName] = sortedTasks;
             }
-            setDisplayState(sortedData);
+            setShowState(sortedData);
             setLocalStorageItem("currentstate", sortedData);
         }
     };
@@ -172,7 +172,7 @@ function App() {
                                     className="select-element"
                                     name="group-select"
                                     onChange={(e) => groupHandler(e)}
-                                    value={selectedGrouping}
+                                    value={markedGrouping}
                                 >
                                     {GroupingList.map((item) => (
                                         <option
@@ -208,11 +208,11 @@ function App() {
             <main className="main-container">
                 <div className="board-grid-container">
                     <div className="board-grid-inner">
-                        {Object.keys(displayState).map((data) => {
+                        {Object.keys(showState).map((data) => {
                             return (
                                 <Board
                                     header={data}
-                                    tickets={displayState[data]}
+                                    tickets={showState[data]}
                                     key={data}
                                 />
                             );

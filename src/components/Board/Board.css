@@ -4,7 +4,6 @@
     width: fit-content;
     padding: 0.5rem;
     width: 100%;
-    /* background-color: black; */
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     
 }
@@ -14,12 +13,9 @@
     justify-content: space-between;
     padding-inline: 2.5px;
     margin: 0 0 20px 0;
-    /* box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px; */
-    /* background-color: rgb(130, 181, 207); */
 }
 
 .board-container .board-hero {
     display: grid;
     gap: 1rem;
-    /* box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px; */
 }

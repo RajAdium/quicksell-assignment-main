@@ -10,11 +10,6 @@ const TicketCard = ({ id, profileURL, status, title, tag }) => {
                 {profileURL ? (
                     <div className="ticket-avatar-container">
                         <div className="ticket-image-container">
-                            {/* <img
-                                src={profileURL}
-                                className="image"
-                                alt="prosper-baba"
-                            /> */}
                         </div>
 
                         <span
